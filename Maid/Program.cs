@@ -8,12 +8,14 @@ DiscordClient client = new(new DiscordConfiguration
 	          DiscordIntents.GuildMembers
 });
 
-client.Ready += (sender, _) =>
+client.SessionCreated += (sender, _) =>
 {
 	Console.WriteLine($"Connected as {sender.CurrentUser.Username}#{sender.CurrentUser.Discriminator}");
 	return Task.CompletedTask;
 };
 client.MessageCreated += EventHandlers.MessageCreated;
+client.GuildMemberAdded += EventHandlers.GuildMemberAdded;
+
 
 await client.ConnectAsync();
 await Task.Delay(-1);

@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using DSharpPlus;
+using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 
 namespace Maid;
@@ -9,6 +10,7 @@ public static partial class EventHandlers
 {
 	private static Regex issueRegex = IssueRegex();
 	private static Regex channelConfigRegex = ChannelConfigRegex();
+	private const ulong WELCOME_CHANNEL_ID = 844340192054738964;
 
 	private static Dictionary<string, string> repositories = new()
 	{
@@ -65,6 +67,17 @@ public static partial class EventHandlers
 		}
 	}
 
+	public static async Task GuildMemberAdded(DiscordClient sender, GuildMemberAddEventArgs args)
+	{
+		DiscordEmbedBuilder embed = new();
+		embed.WithTitle($"Welcome, {args.Member.DisplayName}")
+			.WithColor(DiscordColor.Green)
+			.WithDescription($"Welcome to {args.Guild.Name}, {args.Member.Mention}! Make sure to read the rules over at {args.Guild.RulesChannel.Mention}. Or whatever. I don't care. I'm just a bot.")
+			.WithFooter($"{args.Member.Id}")
+			.WithTimestamp(DateTimeOffset.UtcNow);
+		await args.Guild.Channels[WELCOME_CHANNEL_ID].SendMessageAsync(embed);
+	}
+	
 	[GeneratedRegex(@"(\w+)?##?(\d+)")]
 	private static partial Regex IssueRegex();
 
