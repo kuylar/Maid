@@ -15,7 +15,7 @@ client.SessionCreated += (sender, _) =>
 };
 client.MessageCreated += EventHandlers.MessageCreated;
 client.GuildMemberAdded += EventHandlers.GuildMemberAdded;
-
+client.GuildMemberRemoved += EventHandlers.GuildMemberRemoved;
 
 await client.ConnectAsync();
 await Task.Delay(-1);

@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
+using Humanizer;
 
 namespace Maid;
 
@@ -72,12 +73,27 @@ public static partial class EventHandlers
 		DiscordEmbedBuilder embed = new();
 		embed.WithTitle($"Welcome, {args.Member.DisplayName}")
 			.WithColor(DiscordColor.Green)
-			.WithDescription($"Welcome to {args.Guild.Name}, {args.Member.Mention}! Make sure to read the rules over at {args.Guild.RulesChannel.Mention}. Or whatever. I don't care. I'm just a bot.")
+			.WithDescription(
+				$"Welcome to {args.Guild.Name}, {args.Member.Mention}! Make sure to read the rules over at {args.Guild.RulesChannel.Mention}. Or whatever. I don't care. I'm just a bot.")
 			.WithFooter($"{args.Member.Id}")
 			.WithTimestamp(DateTimeOffset.UtcNow);
 		await args.Guild.Channels[WELCOME_CHANNEL_ID].SendMessageAsync(embed);
 	}
-	
+
+	public static async Task GuildMemberRemoved(DiscordClient sender, GuildMemberRemoveEventArgs args)
+	{
+		DiscordEmbedBuilder embed = new();
+		embed.WithTitle($"Goodbye, {args.Member.DisplayName}")
+			.WithColor(DiscordColor.Red)
+			.WithDescription($"another satisfied customer :3")
+			.WithFooter(
+				$"{args.Member.Id}{(args.Member.JoinedAt.ToUnixTimeSeconds() > 1563273650
+					? " • " + DateTimeOffset.UtcNow.Subtract(args.Member.JoinedAt).Humanize(precision: 2, maxUnit: TimeUnit.Year, minUnit: TimeUnit.Minute)
+					: "")}")
+			.WithTimestamp(DateTimeOffset.UtcNow);
+		await args.Guild.Channels[WELCOME_CHANNEL_ID].SendMessageAsync(embed);
+	}
+
 	[GeneratedRegex(@"(\w+)?##?(\d+)")]
 	private static partial Regex IssueRegex();
 

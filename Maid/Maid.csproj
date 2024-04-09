@@ -19,6 +19,7 @@
 
     <ItemGroup>
       <PackageReference Include="DSharpPlus" Version="5.0.0-nightly-02196" />
+      <PackageReference Include="Humanizer.Core" Version="3.0.0-beta.13" />
     </ItemGroup>
 
 </Project>
