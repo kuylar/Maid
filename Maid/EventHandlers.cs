@@ -69,7 +69,8 @@ public static partial class EventHandlers
 					message.AppendLine($"Unknown project: `{repo}`");
 			}
 
-			await args.Channel.SendMessageAsync(message.ToString());
+			if (message.Length > 0)
+				await args.Channel.SendMessageAsync(message.ToString());
 		}
 	}
 
