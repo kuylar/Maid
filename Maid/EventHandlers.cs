@@ -41,6 +41,11 @@ public static partial class EventHandlers
 			foreach (Match match in issueRefMatches)
 			{
 				string repo = match.Groups[1].Value;
+				if (repo.Contains('<'))
+				{
+					// channel mention, explode
+					continue;
+				}
 				string issue = match.Groups[2].Value;
 				if (string.IsNullOrEmpty(repo))
 				{
@@ -94,7 +99,7 @@ public static partial class EventHandlers
 		await args.Guild.Channels[WELCOME_CHANNEL_ID].SendMessageAsync(embed);
 	}
 
-	[GeneratedRegex(@"(\w+)?##?(\d+)")]
+	[GeneratedRegex(@"([\w<]+)?##?(\d+)")]
 	private static partial Regex IssueRegex();
 
 	[GeneratedRegex(@"\|\|<@\d+>:(.+?)\|\|")]
